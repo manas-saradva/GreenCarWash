@@ -1,0 +1,20 @@
+## Build results
+[Bb]in/
+[Oo]bj/
+[Tt]est[Rr]esults/
+
+## IDE files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## OS files
+.DS_Store
+Thumbs.db
+
+## Project-specific logs or zip files
+GreenCarWash.Api.zip
+*errors*.txt
+*results*.txt
