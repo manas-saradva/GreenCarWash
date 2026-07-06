@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GreenCarWash.Api.DTOs.RequestDtos
 {
-    public class UpdateWasherRequestDto
+    public class UpdateCustomerRequestDto
     {
         [Required]
         [StringLength(100)]

@@ -69,10 +69,22 @@ namespace GreenCarWash.Api.Controllers
             return Ok(await _adminService.CreateServicePlanAsync(request));
         }
 
+        [HttpPut("plans/{id}")]
+        public async Task<IActionResult> UpdateServicePlan(int id,CreatePlanRequestDto request)
+        {
+            return Ok(await _adminService.UpdateServicePlanAsync(id, request));
+        }
+
         [HttpPost("addons")]
         public async Task<IActionResult> CreateAddOn(CreateAddOnRequestDto request)
         {
             return Ok(await _adminService.CreateAddOnAsync(request));
+        }
+
+        [HttpPut("addons/{id}")]
+        public async Task<IActionResult> UpdateAddOn(int id,CreateAddOnRequestDto request)
+        {
+            return Ok(await _adminService.UpdateAddOnAsync(id, request));
         }
     }
 }

@@ -100,14 +100,22 @@ namespace GreenCarWash.Api.Services
             }).ToList();
         }
 
-        public async Task<Washer> GetProfileAsync(int washerId)
+        public async Task<WasherProfileResponseDto> GetProfileAsync(int washerId)
         {
             var washer = await _washerRepo.GetByIdAsync(washerId);
             if (washer == null)
             {
                 throw new KeyNotFoundException("Washer not found");
             } 
-            return washer;
+            return new WasherProfileResponseDto
+            {
+                WasherId = washer.WasherId,
+                Name = washer.Name,
+                Email = washer.Email,
+                Phone = washer.Phone,
+                IsActive = washer.IsActive,
+                AverageRating = washer.AverageRating
+            };
         }
 
         public async Task UpdateProfileAsync(int washerId, UpdateWasherRequestDto request)
@@ -119,6 +127,7 @@ namespace GreenCarWash.Api.Services
             }
             washer.Name = request.Name;
             washer.Phone = request.Phone;
+            washer.IsActive = request.IsActive;
             await _washerRepo.UpdateAsync(washer);
         }
     }

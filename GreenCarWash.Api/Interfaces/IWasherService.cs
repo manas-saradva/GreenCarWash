@@ -15,7 +15,7 @@ namespace GreenCarWash.Api.Interfaces
         Task StartOrderAsync(int orderId, int washerId);
         Task CompleteOrderAsync(int orderId, int washerId);
         Task<List<OrderResponseDto>> GetMyOrdersAsync(int washerId);
-        Task<Washer> GetProfileAsync(int washerId);
+        Task<WasherProfileResponseDto> GetProfileAsync(int washerId);
         Task UpdateProfileAsync(int washerId, UpdateWasherRequestDto dto);
     }
 }

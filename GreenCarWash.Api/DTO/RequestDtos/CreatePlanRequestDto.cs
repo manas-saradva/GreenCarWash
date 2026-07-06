@@ -19,5 +19,10 @@ namespace GreenCarWash.Api.DTOs.RequestDtos
         [Required]
         [Column(TypeName= "decimal(18,2)")]
         public decimal Price{get;set;}
+
+        public int DurationMinutes{get;set;}
+
+        [Required]
+        public bool IsActive{get;set;} = true;
     }
 }

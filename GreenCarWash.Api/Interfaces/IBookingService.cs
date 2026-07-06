@@ -16,5 +16,7 @@ namespace GreenCarWash.Api.Interfaces
         Task CancelOrderAsync(int orderId, int customerId);
         Task<Car> AddCarAsync(int customerId, AddCarRequestDto dto);
         Task<CatalogResponseDto> GetCatalogAsync();
+        Task<CustomerProfileResponseDto> GetCustomerProfileAsync(int customerId);
+        Task UpdateCustomerProfileAsync(int customerId, UpdateCustomerRequestDto dto);
     }
 }

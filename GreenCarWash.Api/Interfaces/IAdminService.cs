@@ -18,6 +18,8 @@ namespace GreenCarWash.Api.Interfaces
         Task CreatePromoCodeAsync(PromoCodeRequestDto dto);
         Task UpdatePromoCodeAsync(int id, PromoCodeRequestDto dto);
         Task<ServicePlan> CreateServicePlanAsync(CreatePlanRequestDto dto);
+        Task<ServicePlan> UpdateServicePlanAsync(int id, CreatePlanRequestDto dto);
         Task<Add_on> CreateAddOnAsync(CreateAddOnRequestDto dto);
+        Task<Add_on> UpdateAddOnAsync(int id, CreateAddOnRequestDto dto);
     }
 }

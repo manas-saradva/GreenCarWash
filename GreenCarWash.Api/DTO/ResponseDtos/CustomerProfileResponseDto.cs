@@ -1,22 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GreenCarWash.Api.DTOs.RequestDtos
+namespace GreenCarWash.Api.DTOs.ResponseDtos
 {
-    public class UpdateWasherRequestDto
+    public class CustomerProfileResponseDto
     {
-        [Required]
-        [StringLength(100)]
+        public int CustomerId{get;set;}
         public string Name{get;set;} = string.Empty;
-
-        [Required]
-        [StringLength(20)]
+        public string Email{get;set;} = string.Empty;
         public string Phone{get;set;} = string.Empty;
-
-        [Required]
         public bool IsActive{get;set;}
+        public DateTime CreatedAt{get;set;}
     }
 }

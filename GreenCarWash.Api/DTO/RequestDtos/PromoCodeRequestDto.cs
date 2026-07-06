@@ -23,5 +23,7 @@ namespace GreenCarWash.Api.DTOs.RequestDtos
 
         [Required]
         public int MaxUses{get;set;}
+
+        public bool IsActive{get;set;} = true;
     }
 }

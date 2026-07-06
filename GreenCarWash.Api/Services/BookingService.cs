@@ -300,5 +300,36 @@ namespace GreenCarWash.Api.Services
                 CreatedAt = o.CreatedAt
             };
         }
+
+        public async Task<CustomerProfileResponseDto> GetCustomerProfileAsync(int customerId)
+        {
+            var customer = await _userRepo.GetByIdAsync(customerId);
+            if (customer == null)
+            {
+                throw new KeyNotFoundException("Customer not found");
+            }
+            return new CustomerProfileResponseDto
+            {
+                CustomerId = customer.CustomerId,
+                Name = customer.Name,
+                Email = customer.Email,
+                Phone = customer.Phone,
+                IsActive = customer.IsActive,
+                CreatedAt = customer.CreatedAt
+            };
+        }
+
+        public async Task UpdateCustomerProfileAsync(int customerId, UpdateCustomerRequestDto request)
+        {
+            var customer = await _userRepo.GetByIdAsync(customerId);
+            if (customer == null)
+            {
+                throw new KeyNotFoundException("Customer not found");
+            }
+            customer.Name = request.Name;
+            customer.Phone = request.Phone;
+            customer.IsActive = request.IsActive;
+            await _userRepo.UpdateAsync(customer);
+        }
     }
 }

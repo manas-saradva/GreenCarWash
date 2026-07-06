@@ -72,5 +72,21 @@ namespace GreenCarWash.Api.Controllers
             var result = await _bookingService.GetCatalogAsync();
             return Ok(result);
         }
+
+        [HttpGet("profile")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var result = await _bookingService.GetCustomerProfileAsync(GetCustomerId());
+            return Ok(result);
+        }
+
+        [HttpPut("profile")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdateProfile(UpdateCustomerRequestDto request)
+        {
+            await _bookingService.UpdateCustomerProfileAsync(GetCustomerId(), request);
+            return Ok(new { Message = "Profile updated successfully" });
+        }
     }
 }

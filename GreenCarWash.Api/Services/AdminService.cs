@@ -127,6 +127,7 @@ namespace GreenCarWash.Api.Services
                 promo.DiscountPercent = request.DiscountPercent;
                 promo.ExpiryDate = request.ExpiryDate;
                 promo.MaxUses = request.MaxUses;
+                promo.IsActive = request.IsActive;
                 await _promoRepo.UpdateAsync(promo);
             }
         }
@@ -137,9 +138,27 @@ namespace GreenCarWash.Api.Services
             {
                 Name = request.Name,
                 Description = request.Description,
-                Price = request.Price
+                Price = request.Price,
+                DurationMinutes = request.DurationMinutes,
+                IsActive = request.IsActive
             };
             return await _planRepo.AddAsync(plan);
+        }
+
+        public async Task<ServicePlan> UpdateServicePlanAsync(int id, CreatePlanRequestDto request)
+        {
+            var plan = await _planRepo.GetByIdAsync(id);
+            if(plan == null)
+            {
+                throw new KeyNotFoundException("Service plan not found");
+            }
+
+            plan.Name = request.Name;
+            plan.Description = request.Description;
+            plan.Price = request.Price;
+            plan.DurationMinutes = request.DurationMinutes;
+            plan.IsActive = request.IsActive;
+            return await _planRepo.UpdateAsync(plan);
         }
 
         public async Task<Add_on> CreateAddOnAsync(CreateAddOnRequestDto request)
@@ -148,9 +167,26 @@ namespace GreenCarWash.Api.Services
             {
                 Name = request.Name,
                 Description = request.Description,
-                Price = request.Price
+                Price = request.Price,
+                IsActive = request.IsActive
             };
             return await _addOnRepo.AddAsync(addOn);
+        }
+
+        public async Task<Add_on> UpdateAddOnAsync(int id, CreateAddOnRequestDto request)
+        {
+            var addOn = await _addOnRepo.GetByIdAsync(id);
+            if(addOn == null)
+            {
+                throw new KeyNotFoundException("Add-on not found");
+            }
+
+            addOn.Name = request.Name;
+            addOn.Description = request.Description;
+            addOn.Price = request.Price;
+            addOn.IsActive = request.IsActive;
+            await _addOnRepo.UpdateAsync(addOn);
+            return addOn;
         }
     }
 }
