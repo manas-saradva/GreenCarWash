@@ -48,14 +48,6 @@ namespace GreenCarWash.Api.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount{get;set;}
 
-        public PaymentMethod? PaymentMethod{get;set;} = Enums.PaymentMethod.Cash;
-
-        public PaymentStatus? PaymentStatus{get;set;} = Enums.PaymentStatus.Pending;
-
-        public DateTime? PaymentTime{get;set;}
-
-        public DateTime CreatedAt{get;set;} = DateTime.UtcNow;
-
         public Review? Review{get;set;}
     }
 }

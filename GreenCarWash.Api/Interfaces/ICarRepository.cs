@@ -11,8 +11,8 @@ namespace GreenCarWash.Api.Interfaces
     {
         Task<Car> AddAsync(Car car);
         Task<Car?> GetByIdAsync(int id);
-        Task<List<Car>> GetByCustomerIdAsync(int customerId);
-        Task<bool> BelongsToCustomerAsync(int carId, int customerId);
+        //Task<List<Car>> GetByCustomerIdAsync(int customerId);
+        //Task<bool> BelongsToCustomerAsync(int carId, int customerId);
         Task<Car?> GetByLicensePlateAsync(string licensePlate);
     }
 }

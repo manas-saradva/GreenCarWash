@@ -113,8 +113,7 @@ namespace GreenCarWash.Api.Services
                 ScheduledAt = request.ScheduledAt,
                 Location = request.Location,
                 Notes = request.Notes,
-                TotalAmount = totalAmount,
-                CreatedAt = DateTime.UtcNow
+                TotalAmount = totalAmount
             };
 
             await _orderRepo.AddAsync(order);
@@ -148,10 +147,7 @@ namespace GreenCarWash.Api.Services
                 TotalAmount = order.TotalAmount,
                 ScheduledAt = order.ScheduledAt,
                 Location = order.Location,
-                Notes = order.Notes,
-                PaymentMethod = order.PaymentMethod?.ToString() ?? "",
-                PaymentStatus = order.PaymentStatus?.ToString() ?? "",
-                CreatedAt = order.CreatedAt
+                Notes = order.Notes
             };
         }
 
@@ -172,25 +168,18 @@ namespace GreenCarWash.Api.Services
             }
 
             var responseDto = MapToOrderResponseDto(order);
-            
-            // Map the AddOn names correctly
-            if (responseDto.AddOn != null && responseDto.AddOn.Any()) 
+
+            var addOnIds = JsonSerializer.Deserialize<List<int>>(order.AddOnsJson ?? "[]") ?? new List<int>();
+            if (addOnIds.Any())
             {
-                var addOnIds = JsonSerializer.Deserialize<List<AddOnItemDto>>(order.AddOnsJson ?? "[]")?.Select(a => a.AddOnId).ToList() ?? new List<int>();
-                if (addOnIds.Any())
+                var addOnsData = await _addOnRepo.GetByIdsAsync(addOnIds);
+                responseDto.AddOn = addOnsData.Select(a => new OrderAddOnDto
                 {
-                    var addOnsData = await _addOnRepo.GetByIdsAsync(addOnIds);
-                    foreach (var line in responseDto.AddOn)
-                    {
-                        var matchingData = addOnsData.FirstOrDefault(a => a.AddOnId == addOnIds[responseDto.AddOn.IndexOf(line)]);
-                        if (matchingData != null)
-                        {
-                            line.AddOnName = matchingData.Name;
-                            line.Price = matchingData.Price;
-                        }
-                    }
-                }
+                    AddOnName = a.Name,
+                    Price = a.Price
+                }).ToList();
             }
+
             return responseDto;
         }
 
@@ -261,25 +250,6 @@ namespace GreenCarWash.Api.Services
         
         private static OrderResponseDto MapToOrderResponseDto(Order o)
         {
-            var addOnLines = new List<OrderAddOnDto>();
-            try
-            {
-                var items = JsonSerializer.Deserialize<List<AddOnItemDto>>(o.AddOnsJson ?? "[]");
-                if(items != null)
-                {
-                    foreach(var item in items)
-                    {
-                        addOnLines.Add(new OrderAddOnDto
-                        {
-                            AddOnName = "",
-                            Price = 0
-                        });
-                    }
-                }
-            }
-            catch
-            {}
-
             return new OrderResponseDto
             {
                 OrderId = o.OrderId,
@@ -290,14 +260,10 @@ namespace GreenCarWash.Api.Services
                     ? $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}"
                     : "",
                 PlanName = o.ServicePlan?.Name ?? "",
-                AddOn = addOnLines,
                 TotalAmount = o.TotalAmount,
                 ScheduledAt = o.ScheduledAt,
                 Location = o.Location,
-                Notes = o.Notes,
-                PaymentMethod = o.PaymentMethod?.ToString() ?? "",
-                PaymentStatus = o.PaymentStatus?.ToString() ?? "",
-                CreatedAt = o.CreatedAt
+                Notes = o.Notes
             };
         }
 

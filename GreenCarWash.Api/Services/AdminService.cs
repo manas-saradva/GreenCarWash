@@ -54,10 +54,7 @@ namespace GreenCarWash.Api.Services
                 PlanName = o.ServicePlan?.Name ?? "",
                 TotalAmount = o.TotalAmount,
                 ScheduledAt = o.ScheduledAt,
-                Location = o.Location ?? "",
-                PaymentMethod = o.PaymentMethod?.ToString() ?? "",
-                PaymentStatus = o.PaymentMethod?.ToString() ?? "",
-                CreatedAt = o.CreatedAt
+                Location = o.Location ?? ""
             }).ToList();
         }
 
@@ -129,6 +126,8 @@ namespace GreenCarWash.Api.Services
                 promo.MaxUses = request.MaxUses;
                 promo.IsActive = request.IsActive;
                 await _promoRepo.UpdateAsync(promo);
+            }else{
+                throw new KeyNotFoundException("Promo code not found");
             }
         }
 

@@ -18,8 +18,5 @@ namespace GreenCarWash.Api.DTOs.ResponseDtos
         public DateTime ScheduledAt{get;set;}
         public string Location{get;set;} = string.Empty;
         public string Notes{get;set;} = string.Empty;
-        public string PaymentMethod{get;set;} = string.Empty;
-        public string PaymentStatus{get;set;} = string.Empty;
-        public DateTime CreatedAt{get;set;}
     }
 }

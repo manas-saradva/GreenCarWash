@@ -18,15 +18,15 @@ namespace GreenCarWash.Api.Repositories
             _context = context;
         }
 
-        public async Task<List<Order>> GetAllAsync()
-        {
-            return await _context.Orders
-                .Include(o => o.Car)
-                .Include(o => o.ServicePlan)
-                .Include(o => o.Customer)
-                .Include(o => o.Washer)
-                .ToListAsync();
-        }
+        // public async Task<List<Order>> GetAllAsync()
+        // {
+        //     return await _context.Orders
+        //         .Include(o => o.Car)
+        //         .Include(o => o.ServicePlan)
+        //         .Include(o => o.Customer)
+        //         .Include(o => o.Washer)
+        //         .ToListAsync();
+        // }
 
         public async Task<List<Order>> GetByCustomerAsync(int customerId)
         {
@@ -74,9 +74,9 @@ namespace GreenCarWash.Api.Repositories
             return order;
         }
 
-        public async Task<int> CountPromoUsageAsync(int promoCodeId)
-        {
-            return await _context.Orders.CountAsync(o => o.PromoCodeId == promoCodeId);
-        }
+        // public async Task<int> CountPromoUsageAsync(int promoCodeId)
+        // {
+        //     return await _context.Orders.CountAsync(o => o.PromoCodeId == promoCodeId);
+        // }
     }
 }

@@ -70,13 +70,6 @@ namespace GreenCarWash.Api.Services
         public async Task CompleteOrderAsync(int orderId, int washerId)
         {
             await UpdateOrderStatusAsync(washerId, orderId, OrderStatus.InProgress, OrderStatus.Completed);
-            var order = await _orderRepo.GetByIdAsync(orderId);
-            if (order != null)
-            {
-                order.PaymentStatus = PaymentStatus.Completed;
-                order.PaymentTime = DateTime.UtcNow;
-                await _orderRepo.UpdateAsync(order);
-            }
         }
 
         public async Task<List<OrderResponseDto>> GetMyOrdersAsync(int washerId)
@@ -93,10 +86,7 @@ namespace GreenCarWash.Api.Services
                 TotalAmount = o.TotalAmount,
                 ScheduledAt = o.ScheduledAt,
                 Location = o.Location,
-                Notes = o.Notes,
-                PaymentMethod = o.PaymentMethod?.ToString() ?? "",
-                PaymentStatus = o.PaymentStatus?.ToString() ?? "",
-                CreatedAt = o.CreatedAt
+                Notes = o.Notes
             }).ToList();
         }
 

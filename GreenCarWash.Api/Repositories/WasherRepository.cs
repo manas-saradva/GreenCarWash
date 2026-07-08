@@ -28,10 +28,10 @@ namespace GreenCarWash.Api.Repositories
             return await _context.Washers.FindAsync(id);
         }
 
-        public async Task<List<Washer>> GetAllActiveAsync()
-        {
-            return await _context.Washers.Where(w => w.IsActive).ToListAsync();
-        }
+        // public async Task<List<Washer>> GetAllActiveAsync()
+        // {
+        //     return await _context.Washers.Where(w => w.IsActive).ToListAsync();
+        // }
 
         public async Task<Washer> AddAsync(Washer washer)
         {

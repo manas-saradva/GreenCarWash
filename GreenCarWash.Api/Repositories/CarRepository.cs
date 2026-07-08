@@ -30,15 +30,15 @@ namespace GreenCarWash.Api.Repositories
             return await _context.Cars.FindAsync(id);
         }
 
-        public async Task<List<Car>> GetByCustomerIdAsync(int customerId)
-        {
-            return await _context.Cars.Where(c => c.CustomerId == customerId).ToListAsync();
-        }
+        // public async Task<List<Car>> GetByCustomerIdAsync(int customerId)
+        // {
+        //     return await _context.Cars.Where(c => c.CustomerId == customerId).ToListAsync();
+        // }
 
-        public async Task<bool> BelongsToCustomerAsync(int carId, int customerId)
-        {
-            return await _context.Cars.AnyAsync(c => c.CarId == carId && c.CustomerId == customerId);
-        }
+        // public async Task<bool> BelongsToCustomerAsync(int carId, int customerId)
+        // {
+        //     return await _context.Cars.AnyAsync(c => c.CarId == carId && c.CustomerId == customerId);
+        // }
 
         public async Task<Car?> GetByLicensePlateAsync(string licensePlate)
         {
