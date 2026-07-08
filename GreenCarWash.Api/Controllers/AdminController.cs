@@ -41,7 +41,7 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> AssignWasher(int id,AssignWasherRequestDto request)
         {
             await _adminService.AssignWasherAsync(id, request.WasherId);
-            return Ok(new { Message = "Washer Assigned" });
+            return Ok("Washer Assigned");
         }
 
         [HttpGet("reports")]
@@ -53,20 +53,21 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> CreatePromoCode(PromoCodeRequestDto request)
         {
             await _adminService.CreatePromoCodeAsync(request);
-            return Ok(new { Message = "Promo code created" });
+            return Ok("Promo code created");
         }
 
         [HttpPut("promo-codes/{id}")]
         public async Task<IActionResult> UpdatePromoCode(int id,PromoCodeRequestDto request)
         {
             await _adminService.UpdatePromoCodeAsync(id, request);
-            return Ok(new { Message = "Promo code updated successfully" });
+            return Ok("Promo code updated successfully");
         }
 
         [HttpPost("plans")]
         public async Task<IActionResult> CreateServicePlan(CreatePlanRequestDto request)
         {
-            return Ok(await _adminService.CreateServicePlanAsync(request));
+            await _adminService.CreateServicePlanAsync(request);
+            return Ok("New service plan created");
         }
 
         [HttpPut("plans/{id}")]
@@ -78,7 +79,8 @@ namespace GreenCarWash.Api.Controllers
         [HttpPost("addons")]
         public async Task<IActionResult> CreateAddOn(CreateAddOnRequestDto request)
         {
-            return Ok(await _adminService.CreateAddOnAsync(request));
+            await _adminService.CreateAddOnAsync(request);
+            return Ok("New add-on created");
         }
 
         [HttpPut("addons/{id}")]

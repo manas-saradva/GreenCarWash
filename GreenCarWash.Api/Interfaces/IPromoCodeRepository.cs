@@ -9,6 +9,7 @@ namespace GreenCarWash.Api.Interfaces
 {
     public interface IPromoCodeRepository
     {
+        Task<Promo_code?> GetByIdAsync(int id);
         Task<Promo_code?> GetByCodeAsync(string code);
         Task AddAsync(Promo_code promo);
         Task UpdateAsync(Promo_code promo);

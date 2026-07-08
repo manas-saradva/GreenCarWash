@@ -123,14 +123,7 @@ namespace GreenCarWash.Api.Services
 
             if(customer != null)
             {
-                var body = $"""
-                <h2>Booking Confirmed</h2>
-                <p>Order ID: {order.OrderId}</p>
-                <p>Service Plan: {plan.Name}</p>
-                <p>Scheduled At: {order.ScheduledAt}</p>
-                <p>Location: {order.Location}</p>
-                <p>Total Amount: ₹{order.TotalAmount}</p>
-                """;
+                var body = $"Booking Confirmed\nOrder ID: {order.OrderId}\nService Plan: {plan.Name}\nScheduled At: {order.ScheduledAt}\nLocation: {order.Location}\nTotal Amount: ₹{order.TotalAmount}";
 
                 await _emailService.SendEmailAsync(customer.Email,"GreenCarWash Booking Confirmation",body); 
             }

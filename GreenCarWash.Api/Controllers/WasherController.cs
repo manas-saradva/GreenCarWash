@@ -30,28 +30,28 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> AcceptOrder(int id)
         {
             await _washerService.AcceptOrderAsync(id, GetWasherId());
-            return Ok(new { Message = "Order Accepted" });
+            return Ok("Order Accepted");
         }
 
         [HttpPost("orders/{id}/decline")]
         public async Task<IActionResult> DeclineOrder(int id)
         {
             await _washerService.DeclineOrderAsync(id, GetWasherId());
-            return Ok(new { Message = "Order Declined" });
+            return Ok("Order Declined");
         }
 
         [HttpPost("orders/{id}/start")]
         public async Task<IActionResult> StartOrder(int id)
         {
             await _washerService.StartOrderAsync(id, GetWasherId());
-            return Ok(new { Message = "Order Started" });
+            return Ok("Order Started");
         }
 
         [HttpPost("orders/{id}/complete")]
         public async Task<IActionResult> CompleteOrder(int id)
         {
             await _washerService.CompleteOrderAsync(id, GetWasherId());
-            return Ok(new { Message = "Order Completed" });
+            return Ok("Order Completed");
         }
 
         [HttpGet("my-orders")]
@@ -72,7 +72,7 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> UpdateProfile(UpdateWasherRequestDto request)
         {
             await _washerService.UpdateProfileAsync(GetWasherId(), request);
-            return Ok(new { Message = "Profile updated successfully" });
+            return Ok("Profile updated successfully");
         }
     }
 }

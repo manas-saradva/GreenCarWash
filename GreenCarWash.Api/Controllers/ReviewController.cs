@@ -27,7 +27,7 @@ namespace GreenCarWash.Api.Controllers
         {
             var customerId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
             await _reviewService.AddReviewAsync(customerId, request);
-            return Ok(new { Message = "Review added successfully" });
+            return Ok("Review added successfully");
         }
 
         [HttpGet("washer/{washerId}")]

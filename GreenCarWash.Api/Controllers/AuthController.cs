@@ -22,8 +22,8 @@ namespace GreenCarWash.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequestDto request)
         {
-            var result = await _authService.RegisterAsync(request);
-            return Ok(result);
+            await _authService.RegisterAsync(request);
+            return Ok("User registered successfully");
         }
 
         [HttpPost("login")]

@@ -28,7 +28,7 @@ namespace GreenCarWash.Api.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
+        public async Task RegisterAsync(RegisterRequestDto request)
         {
             if (string.IsNullOrWhiteSpace(request.Role))
             {
@@ -53,15 +53,7 @@ namespace GreenCarWash.Api.Services
                     PasswordHash = hash
                 };
                 await _washerRepo.AddAsync(washer);
-
-                var token = _jwtHelper.GenerateToken(washer.WasherId,washer.Email,"Washer");
-                return new AuthResponseDto
-                {
-                    Token = token.Token,
-                    ExpiresAt = token.ExpiresAt,
-                    Role = "Washer",
-                    UserId = washer.WasherId
-                };
+                return;
             }
             else if(role.Equals("Customer", StringComparison.OrdinalIgnoreCase))
             {
@@ -78,15 +70,7 @@ namespace GreenCarWash.Api.Services
                     PasswordHash = hash
                 };
                 await _userRepo.AddAsync(customer);
-
-                var token = _jwtHelper.GenerateToken(customer.CustomerId,customer.Email,"Customer");
-                return new AuthResponseDto
-                {
-                    Token = token.Token,
-                    ExpiresAt = token.ExpiresAt,
-                    Role = "Customer",
-                    UserId = customer.CustomerId
-                };
+                return;
             }
             else
             {

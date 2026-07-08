@@ -54,7 +54,7 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> CancelOrder(int id)
         {
             await _bookingService.CancelOrderAsync(id, GetCustomerId());
-            return Ok(new { Message = "Order cancelled successfully" });
+            return Ok("Order cancelled successfully");
         }
 
         [HttpPost("cars")]
@@ -86,7 +86,7 @@ namespace GreenCarWash.Api.Controllers
         public async Task<IActionResult> UpdateProfile(UpdateCustomerRequestDto request)
         {
             await _bookingService.UpdateCustomerProfileAsync(GetCustomerId(), request);
-            return Ok(new { Message = "Profile updated successfully" });
+            return Ok("Profile updated successfully");
         }
     }
 }

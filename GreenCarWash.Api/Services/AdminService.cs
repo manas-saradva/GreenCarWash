@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using GreenCarWash.Api.DTOs.RequestDtos;
 using GreenCarWash.Api.DTOs.ResponseDtos;
@@ -34,27 +35,53 @@ namespace GreenCarWash.Api.Services
             return _adminRepo.GetAllCustomersAsync();
         }
 
-        public Task<List<Washer>> GetWashersAsync()
+        public async Task<List<WasherProfileResponseDto>> GetWashersAsync()
         {
-            return _adminRepo.GetAllWashersAsync();
+            var washers = await _adminRepo.GetAllWashersAsync();
+            return washers.Select(w => new WasherProfileResponseDto
+            {
+                WasherId = w.WasherId,
+                Name = w.Name,
+                Email = w.Email,
+                Phone = w.Phone,
+                IsActive = w.IsActive,
+                AverageRating = w.AverageRating
+            }).ToList();
         }
 
         public async Task<List<OrderResponseDto>> GetOrdersAsync()
         {
             var orders = await _adminRepo.GetAllOrdersAsync();
 
-            return orders.Select(o => new OrderResponseDto
+            var allAddOnIds = orders
+                .SelectMany(o => JsonSerializer.Deserialize<List<int>>(o.AddOnsJson ?? "[]") ?? new List<int>())
+                .Distinct()
+                .ToList();
+
+            var addOns = allAddOnIds.Any() ? await _addOnRepo.GetByIdsAsync(allAddOnIds) : new List<Add_on>();
+
+            return orders.Select(o =>
             {
-                OrderId = o.OrderId,
-                Status = o.Status.ToString(),
-                CustomerName = o.Customer?.Name ?? "",
-                WasherName = o.Washer?.Name ?? "",
-                CarDetails = o.Car == null ? "" : 
-                    $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
-                PlanName = o.ServicePlan?.Name ?? "",
-                TotalAmount = o.TotalAmount,
-                ScheduledAt = o.ScheduledAt,
-                Location = o.Location ?? ""
+                var orderAddOnIds = JsonSerializer.Deserialize<List<int>>(o.AddOnsJson ?? "[]") ?? new List<int>();
+
+                return new OrderResponseDto
+                {
+                    OrderId = o.OrderId,
+                    Status = o.Status.ToString(),
+                    CustomerName = o.Customer?.Name ?? "",
+                    WasherName = o.Washer?.Name ?? "",
+                    CarDetails = o.Car == null ? "" :
+                        $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
+                    PlanName = o.ServicePlan?.Name ?? "",
+                    AddOn = addOns
+                        .Where(a => orderAddOnIds.Contains(a.AddOnId))
+                        .Select(a => new OrderAddOnDto { AddOnName = a.Name, Price = a.Price })
+                        .ToList(),
+                    TotalAmount = o.TotalAmount,
+                    ScheduledAt = o.ScheduledAt,
+                    Location = o.Location ?? "",
+                    Notes = o.Notes ?? ""
+                };
             }).ToList();
         }
 
@@ -118,20 +145,21 @@ namespace GreenCarWash.Api.Services
 
         public async Task UpdatePromoCodeAsync(int id,PromoCodeRequestDto request)
         {
-            var promo = await _promoRepo.GetByCodeAsync(request.Code);
-            if(promo != null)
+            var promo = await _promoRepo.GetByIdAsync(id);
+            if(promo == null)
             {
-                promo.DiscountPercent = request.DiscountPercent;
-                promo.ExpiryDate = request.ExpiryDate;
-                promo.MaxUses = request.MaxUses;
-                promo.IsActive = request.IsActive;
-                await _promoRepo.UpdateAsync(promo);
-            }else{
                 throw new KeyNotFoundException("Promo code not found");
             }
+
+            promo.Code = request.Code;
+            promo.DiscountPercent = request.DiscountPercent;
+            promo.ExpiryDate = request.ExpiryDate;
+            promo.MaxUses = request.MaxUses;
+            promo.IsActive = request.IsActive;
+            await _promoRepo.UpdateAsync(promo);
         }
 
-        public async Task<ServicePlan> CreateServicePlanAsync(CreatePlanRequestDto request)
+        public async Task CreateServicePlanAsync(CreatePlanRequestDto request)
         {
             var plan = new ServicePlan
             {
@@ -141,7 +169,7 @@ namespace GreenCarWash.Api.Services
                 DurationMinutes = request.DurationMinutes,
                 IsActive = request.IsActive
             };
-            return await _planRepo.AddAsync(plan);
+            await _planRepo.AddAsync(plan);
         }
 
         public async Task<ServicePlan> UpdateServicePlanAsync(int id, CreatePlanRequestDto request)
@@ -160,7 +188,7 @@ namespace GreenCarWash.Api.Services
             return await _planRepo.UpdateAsync(plan);
         }
 
-        public async Task<Add_on> CreateAddOnAsync(CreateAddOnRequestDto request)
+        public async Task CreateAddOnAsync(CreateAddOnRequestDto request)
         {
             var addOn = new Add_on
             {
@@ -169,7 +197,7 @@ namespace GreenCarWash.Api.Services
                 Price = request.Price,
                 IsActive = request.IsActive
             };
-            return await _addOnRepo.AddAsync(addOn);
+            await _addOnRepo.AddAsync(addOn);
         }
 
         public async Task<Add_on> UpdateAddOnAsync(int id, CreateAddOnRequestDto request)

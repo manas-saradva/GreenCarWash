@@ -18,6 +18,11 @@ namespace GreenCarWash.Api.Repositories
             _context = context;
         }
 
+        public async Task<Promo_code?> GetByIdAsync(int id)
+        {
+            return await _context.PromoCodes.FindAsync(id);
+        }
+
         public async Task<Promo_code?> GetByCodeAsync(string code)
         {
             return await _context.PromoCodes.FirstOrDefaultAsync(p => p.Code == code);
