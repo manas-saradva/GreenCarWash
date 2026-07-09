@@ -35,11 +35,6 @@ namespace GreenCarWash.Api.Repositories
             return customer;
         }
 
-        // public async Task<bool> ExistsAsync(string email)
-        // {
-        //     return await _context.Customers.AnyAsync(c => c.Email == email);
-        // }
-
         public async Task<Customer> UpdateAsync(Customer customer)
         {
             _context.Customers.Update(customer);

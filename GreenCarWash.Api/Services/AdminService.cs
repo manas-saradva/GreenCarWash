@@ -94,7 +94,6 @@ namespace GreenCarWash.Api.Services
         public async Task<ReportResponseDto> GetReportsAsync()
         {
             var orders = await _adminRepo.GetAllOrdersAsync();
-            // var washers = await _adminRepo.GetAllWashersAsync();
 
             var report = new ReportResponseDto
             {
@@ -102,14 +101,7 @@ namespace GreenCarWash.Api.Services
                 TotalRevenue = orders.Where(o => o.Status == Enums.OrderStatus.Completed).Sum(o => o.TotalAmount),
                 CompletedOrders = orders.Count(o => o.Status == Enums.OrderStatus.Completed),
                 CancelledOrders = orders.Count(o => o.Status == Enums.OrderStatus.Cancelled),
-                PendingOrders = orders.Count(o => o.Status == Enums.OrderStatus.Pending),
-                // TopWashers = washers.OrderByDescending(w => w.AverageRating).Take(5).Select(w => new WasherPerformanceDto
-                // {
-                //    WasherId = w.WasherId,
-                //    Name = w.Name,
-                //    AverageRating = w.AverageRating,
-                //    CompletedOrders = orders.Count(o => o.WasherId == w.WasherId && o.Status == Enums.OrderStatus.Completed) 
-                // }).ToList()
+                PendingOrders = orders.Count(o => o.Status == Enums.OrderStatus.Pending)
             };
 
             return report;
