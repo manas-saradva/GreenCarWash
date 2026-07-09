@@ -12,7 +12,6 @@ namespace GreenCarWash.Api.Interfaces
         Task<Customer?> FindByEmailAsync(string email);
         Task<Customer?> GetByIdAsync(int id);
         Task<Customer> AddAsync(Customer customer);
-        //Task<bool> ExistsAsync(string email);
         Task<Customer> UpdateAsync(Customer customer);
     }
 }

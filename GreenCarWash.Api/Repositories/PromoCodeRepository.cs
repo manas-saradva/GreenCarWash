@@ -25,7 +25,7 @@ namespace GreenCarWash.Api.Repositories
 
         public async Task<Promo_code?> GetByCodeAsync(string code)
         {
-            return await _context.PromoCodes.FirstOrDefaultAsync(p => p.Code == code);
+            return await _context.PromoCodes.Include(p => p.Order).FirstOrDefaultAsync(p => p.Code == code);
         }
 
         public async Task AddAsync(Promo_code promo)

@@ -9,12 +9,10 @@ namespace GreenCarWash.Api.Interfaces
 {
     public interface IOrderRepository
     {
-        //Task<List<Order>> GetAllAsync();
         Task<List<Order>> GetByCustomerAsync(int customerId);
         Task<List<Order>> GetByWasherAsync(int washerId);
         Task<Order?> GetByIdAsync(int id);
         Task<Order> AddAsync(Order order);
         Task<Order> UpdateAsync(Order order);
-        //Task<int> CountPromoUsageAsync(int promoCodeId);
     }
 }

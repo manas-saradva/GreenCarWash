@@ -17,6 +17,7 @@ namespace GreenCarWash.Tests
     {
         private Mock<IOrderRepository> _orderRepo;
         private Mock<IWasherRepository> _washerRepo;
+        private Mock<IEmailService> _emailService;
         private WasherService _service;
 
         [SetUp]
@@ -24,7 +25,8 @@ namespace GreenCarWash.Tests
         {
             _orderRepo = new Mock<IOrderRepository>();
             _washerRepo = new Mock<IWasherRepository>();
-            _service = new WasherService(_orderRepo.Object, _washerRepo.Object);
+            _emailService = new Mock<IEmailService>();
+            _service = new WasherService(_orderRepo.Object, _washerRepo.Object, _emailService.Object);
         }
 
         [Test]

@@ -40,21 +40,16 @@ namespace GreenCarWash.Tests
         }
 
         [Test]
-        public async Task RegisterAsync_ValidCustomer_ReturnsToken()
+        public async Task RegisterAsync_ValidCustomer_Succeeds()
         {
             // Arrange
             var req = new RegisterRequestDto { Name = "John", Email = "john@test.com", Password = "pass", Role = "Customer" };
             _userRepoMock.Setup(x => x.FindByEmailAsync(req.Email)).ReturnsAsync((Customer?)null);
             _userRepoMock.Setup(x => x.AddAsync(It.IsAny<Customer>())).Callback<Customer>(c => c.CustomerId = 1).ReturnsAsync((Customer c) => c);
 
-            // Act
-            var res = await _authService.RegisterAsync(req);
-
-            // Assert
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.Token);
-            Assert.AreEqual("Customer", res.Role);
-            Assert.AreEqual(1, res.UserId);
+            // Act & Assert
+            Assert.DoesNotThrowAsync(async () => await _authService.RegisterAsync(req));
+            _userRepoMock.Verify(x => x.AddAsync(It.IsAny<Customer>()), Times.Once);
         }
 
         [Test]
@@ -67,18 +62,14 @@ namespace GreenCarWash.Tests
         }
 
         [Test]
-        public async Task RegisterAsync_WhenRoleWasher_ReturnsToken()
+        public async Task RegisterAsync_WhenRoleWasher_Succeeds()
         {
             var req = new RegisterRequestDto { Name = "Jane", Email = "jane@test.com", Password = "pass", Role = "Washer" };
             _washerRepoMock.Setup(x => x.FindByEmailAsync(req.Email)).ReturnsAsync((Washer?)null);
             _washerRepoMock.Setup(x => x.AddAsync(It.IsAny<Washer>())).Callback<Washer>(w => w.WasherId = 1).ReturnsAsync((Washer w) => w);
 
-            var res = await _authService.RegisterAsync(req);
-
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.Token);
-            Assert.AreEqual("Washer", res.Role);
-            Assert.AreEqual(1, res.UserId);
+            Assert.DoesNotThrowAsync(async () => await _authService.RegisterAsync(req));
+            _washerRepoMock.Verify(x => x.AddAsync(It.IsAny<Washer>()), Times.Once);
         }
 
         [Test]

@@ -78,7 +78,7 @@ namespace GreenCarWash.Api.Services
             {
                 var promo = await _promoRepo.GetByCodeAsync(request.PromoCode);
 
-                if(promo != null && promo.IsActive && promo.ExpiryDate > DateTime.UtcNow)
+                if(promo != null && promo.IsActive && promo.ExpiryDate > DateTime.UtcNow && promo.Order.Count < promo.MaxUses)
                 {
                     totalAmount -= totalAmount * (promo.DiscountPercent/100m);
                     promoId = promo.PromoCodeId;

@@ -11,7 +11,6 @@ namespace GreenCarWash.Api.Interfaces
     {
         Task<Washer?> FindByEmailAsync(string email);
         Task<Washer?> GetByIdAsync(int id);
-        //Task<List<Washer>> GetAllActiveAsync();
         Task<Washer> AddAsync(Washer washer);
         Task<Washer> UpdateAsync(Washer washer);
     }
