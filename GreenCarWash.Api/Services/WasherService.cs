@@ -46,8 +46,9 @@ namespace GreenCarWash.Api.Services
             await _orderRepo.UpdateAsync(order);
         }
 
-        public async Task AcceptOrderAsync(int orderId, int washerId) => 
+        public async Task AcceptOrderAsync(int orderId, int washerId){
             await UpdateOrderStatusAsync(washerId, orderId, OrderStatus.Pending, OrderStatus.Accepted);
+        }
 
         public async Task DeclineOrderAsync(int orderId, int washerId)
         {
@@ -64,19 +65,18 @@ namespace GreenCarWash.Api.Services
             order.Status = OrderStatus.Pending;
 
             await _orderRepo.UpdateAsync(order);
-            var body = $"Booking Cancelled\nOrder ID: {order.OrderId}";
-            await _emailService.SendEmailAsync(order.Customer.Email,"GreenCarWash Booking Cancelled",body); 
         }
 
-        public async Task StartOrderAsync(int orderId, int washerId) => 
+        public async Task StartOrderAsync(int orderId, int washerId){
             await UpdateOrderStatusAsync(washerId, orderId, OrderStatus.Accepted, OrderStatus.InProgress);
+        }
 
         public async Task CompleteOrderAsync(int orderId, int washerId)
         {
             await UpdateOrderStatusAsync(washerId, orderId, OrderStatus.InProgress, OrderStatus.Completed);
             
             var order = await _orderRepo.GetByIdAsync(orderId);
-            var body = $"Booking Completed\nOrder ID: {order.OrderId}\nService Plan: {order.ServicePlan?.Name}\nScheduled At: {order.ScheduledAt}\nLocation: {order.Location}\nTotal Amount: ₹{order.TotalAmount}";
+            var body = $"Booking Completed\nOrder ID: {order.OrderId}\nLocation: {order.Location}\nTotal Amount: ₹{order.TotalAmount}";
             await _emailService.SendEmailAsync(order.Customer.Email, "GreenCarWash Booking Completed", body); 
         }
 

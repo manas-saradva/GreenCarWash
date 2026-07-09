@@ -12,6 +12,6 @@ namespace GreenCarWash.Api.DTOs.ResponseDtos
         public int CompletedOrders{get;set;}
         public int CancelledOrders{get;set;}
         public int PendingOrders{get;set;}
-        public List<WasherPerformanceDto> TopWashers {get;set;} = new List<WasherPerformanceDto>();
+        // public List<WasherPerformanceDto> TopWashers {get;set;} = new List<WasherPerformanceDto>();
     }
 }

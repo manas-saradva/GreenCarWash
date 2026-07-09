@@ -70,8 +70,7 @@ namespace GreenCarWash.Api.Services
                     Status = o.Status.ToString(),
                     CustomerName = o.Customer?.Name ?? "",
                     WasherName = o.Washer?.Name ?? "",
-                    CarDetails = o.Car == null ? "" :
-                        $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
+                    CarDetails = o.Car == null ? "" : $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
                     PlanName = o.ServicePlan?.Name ?? "",
                     AddOn = addOns
                         .Where(a => orderAddOnIds.Contains(a.AddOnId))
@@ -110,7 +109,7 @@ namespace GreenCarWash.Api.Services
         public async Task<ReportResponseDto> GetReportsAsync()
         {
             var orders = await _adminRepo.GetAllOrdersAsync();
-            var washers = await _adminRepo.GetAllWashersAsync();
+            // var washers = await _adminRepo.GetAllWashersAsync();
 
             var report = new ReportResponseDto
             {
@@ -119,13 +118,13 @@ namespace GreenCarWash.Api.Services
                 CompletedOrders = orders.Count(o => o.Status == Enums.OrderStatus.Completed),
                 CancelledOrders = orders.Count(o => o.Status == Enums.OrderStatus.Cancelled),
                 PendingOrders = orders.Count(o => o.Status == Enums.OrderStatus.Pending),
-                TopWashers = washers.OrderByDescending(w => w.AverageRating).Take(5).Select(w => new WasherPerformanceDto
-                {
-                   WasherId = w.WasherId,
-                   Name = w.Name,
-                   AverageRating = w.AverageRating,
-                   CompletedOrders = orders.Count(o => o.WasherId == w.WasherId && o.Status == Enums.OrderStatus.Completed) 
-                }).ToList()
+                // TopWashers = washers.OrderByDescending(w => w.AverageRating).Take(5).Select(w => new WasherPerformanceDto
+                // {
+                //    WasherId = w.WasherId,
+                //    Name = w.Name,
+                //    AverageRating = w.AverageRating,
+                //    CompletedOrders = orders.Count(o => o.WasherId == w.WasherId && o.Status == Enums.OrderStatus.Completed) 
+                // }).ToList()
             };
 
             return report;

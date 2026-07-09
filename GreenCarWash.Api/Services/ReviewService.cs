@@ -35,10 +35,10 @@ namespace GreenCarWash.Api.Services
             {
                 throw new System.InvalidOperationException("Cannot review an incomplete order.");
             }
-            if (order.WasherId == null)
-            {
-                throw new InvalidOperationException("Order has no assigned washer.");
-            }
+            // if (order.WasherId == null)
+            // {
+            //     throw new InvalidOperationException("Order has no assigned washer.");
+            // }
 
             if (order.WasherId != request.WasherId)
             {
@@ -79,7 +79,7 @@ namespace GreenCarWash.Api.Services
                 ReviewId = r.ReviewId,
                 Rating = r.Rating,
                 Comment = r.Comment,
-                CustomerName = r.Customer?.Name ?? "Unknown",
+                CustomerName = r.Customer?.Name ?? "",
                 CreatedAt = r.CreatedAt
             }).ToList();
         }

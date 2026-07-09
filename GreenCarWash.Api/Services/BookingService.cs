@@ -64,10 +64,10 @@ namespace GreenCarWash.Api.Services
                 //var addOnIds = request.AddOns.Select(a => a.AddOnId).ToList();
                 var addOnIds = request.AddOns;
 
-                if (addOnIds.Distinct().Count() != addOnIds.Count)
-                {
-                    throw new ArgumentException("Cannot add the same AddOn multiple times.");
-                }
+                // if (addOnIds.Distinct().Count() != addOnIds.Count)
+                // {
+                //     throw new ArgumentException("Cannot add the same AddOn multiple times.");
+                // }
 
                 var addOns = await _addOnRepo.GetByIdsAsync(addOnIds);
 
@@ -192,6 +192,8 @@ namespace GreenCarWash.Api.Services
 
             order.Status = Enums.OrderStatus.Cancelled;
             await _orderRepo.UpdateAsync(order);
+            var body = $"Booking Cancelled\nOrder ID: {order.OrderId}";
+            await _emailService.SendEmailAsync(order.Customer.Email,"GreenCarWash Booking Cancelled",body); 
         }
 
         public async Task<Car> AddCarAsync(int customerId, AddCarRequestDto request)
