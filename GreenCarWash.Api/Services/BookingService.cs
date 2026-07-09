@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using GreenCarWash.Api.DTOs.RequestDtos;
 using GreenCarWash.Api.DTOs.ResponseDtos;
@@ -57,37 +56,21 @@ namespace GreenCarWash.Api.Services
             }
 
             decimal totalAmount = plan.Price;
-            var addOnLines = new List<OrderAddOnDto>();
+            string? addOnName = null;
+            decimal addOnPrice = 0;
+            int? addOnId = null;
 
-            if(request.AddOns != null && request.AddOns.Any())
+            if(request.AddOnId.HasValue)
             {
-                //var addOnIds = request.AddOns.Select(a => a.AddOnId).ToList();
-                var addOnIds = request.AddOns;
-
-                // if (addOnIds.Distinct().Count() != addOnIds.Count)
-                // {
-                //     throw new ArgumentException("Cannot add the same AddOn multiple times.");
-                // }
-
-                var addOns = await _addOnRepo.GetByIdsAsync(addOnIds);
-
-                foreach(var addOnId in addOnIds)
+                var addOn = await _addOnRepo.GetByIdAsync(request.AddOnId.Value);
+                if(addOn != null && addOn.IsActive)
                 {
-                    var addOn = addOns.FirstOrDefault(a => a.AddOnId == addOnId);
-
-                    if(addOn != null && addOn.IsActive)
-                    {
-                        totalAmount += addOn.Price;
-
-                        addOnLines.Add(new OrderAddOnDto
-                        {
-                           AddOnName = addOn.Name,
-                           Price = addOn.Price
-                        });
-                    }
+                    totalAmount += addOn.Price;
+                    addOnName = addOn.Name;
+                    addOnPrice = addOn.Price;
+                    addOnId = addOn.AddOnId;
                 }
             }
-
 
             int? promoId = null;
 
@@ -108,7 +91,7 @@ namespace GreenCarWash.Api.Services
                 CarId = request.CarId,
                 PlanId = request.PlanId,
                 PromoCodeId = promoId,
-                AddOnsJson = JsonSerializer.Serialize(request.AddOns ?? new List<int>()),
+                AddOnId = addOnId,
                 Status = Enums.OrderStatus.Pending,
                 ScheduledAt = request.ScheduledAt,
                 Location = request.Location,
@@ -136,7 +119,8 @@ namespace GreenCarWash.Api.Services
                 WasherName = "",
                 CarDetails = $"{car.Make} {car.Model} ({car.Year}) - {car.LicensePlate}",
                 PlanName = plan.Name,
-                AddOn = addOnLines,
+                AddOnName = addOnName,
+                AddOnPrice = addOnPrice,
                 TotalAmount = order.TotalAmount,
                 ScheduledAt = order.ScheduledAt,
                 Location = order.Location,
@@ -160,20 +144,7 @@ namespace GreenCarWash.Api.Services
                 throw new KeyNotFoundException("Order not found.");
             }
 
-            var responseDto = MapToOrderResponseDto(order);
-
-            var addOnIds = JsonSerializer.Deserialize<List<int>>(order.AddOnsJson ?? "[]") ?? new List<int>();
-            if (addOnIds.Any())
-            {
-                var addOnsData = await _addOnRepo.GetByIdsAsync(addOnIds);
-                responseDto.AddOn = addOnsData.Select(a => new OrderAddOnDto
-                {
-                    AddOnName = a.Name,
-                    Price = a.Price
-                }).ToList();
-            }
-
-            return responseDto;
+            return MapToOrderResponseDto(order);
         }
 
         public async Task CancelOrderAsync(int orderId, int customerId)
@@ -255,6 +226,8 @@ namespace GreenCarWash.Api.Services
                     ? $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}"
                     : "",
                 PlanName = o.ServicePlan?.Name ?? "",
+                AddOnName = o.AddOn?.Name,
+                AddOnPrice = o.AddOn?.Price ?? 0,
                 TotalAmount = o.TotalAmount,
                 ScheduledAt = o.ScheduledAt,
                 Location = o.Location,

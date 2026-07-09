@@ -25,6 +25,7 @@ namespace GreenCarWash.Api.Repositories
                 .Include(o => o.ServicePlan)
                 .Include(o => o.Customer)
                 .Include(o => o.Washer)
+                .Include(o => o.AddOn)
                 .Where(o => o.CustomerId == customerId)
                 .ToListAsync();
         }
@@ -36,6 +37,7 @@ namespace GreenCarWash.Api.Repositories
                 .Include(o => o.ServicePlan)
                 .Include(o => o.Customer)
                 .Include(o => o.Washer)
+                .Include(o => o.AddOn)
                 .Where(o => o.WasherId == washerId)
                 .ToListAsync();
         }
@@ -47,6 +49,7 @@ namespace GreenCarWash.Api.Repositories
                 .Include(o => o.ServicePlan)
                 .Include(o => o.Customer)
                 .Include(o => o.Washer)
+                .Include(o => o.AddOn)
                 .FirstOrDefaultAsync(o => o.OrderId == id);
         }
 

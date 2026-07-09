@@ -29,11 +29,6 @@ namespace GreenCarWash.Api.Repositories
             return await _context.AddOns.FindAsync(id);
         }
 
-        public async Task<List<Add_on>> GetByIdsAsync(List<int> ids)
-        {
-            return await _context.AddOns.Where(a => ids.Contains(a.AddOnId)).ToListAsync();
-        }
-
         public async Task<Add_on> AddAsync(Add_on addOn)
         {
             await _context.AddOns.AddAsync(addOn);

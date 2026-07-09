@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using GreenCarWash.Api.DTOs.RequestDtos;
 using GreenCarWash.Api.DTOs.ResponseDtos;
@@ -53,34 +52,20 @@ namespace GreenCarWash.Api.Services
         {
             var orders = await _adminRepo.GetAllOrdersAsync();
 
-            var allAddOnIds = orders
-                .SelectMany(o => JsonSerializer.Deserialize<List<int>>(o.AddOnsJson ?? "[]") ?? new List<int>())
-                .Distinct()
-                .ToList();
-
-            var addOns = allAddOnIds.Any() ? await _addOnRepo.GetByIdsAsync(allAddOnIds) : new List<Add_on>();
-
-            return orders.Select(o =>
+            return orders.Select(o => new OrderResponseDto
             {
-                var orderAddOnIds = JsonSerializer.Deserialize<List<int>>(o.AddOnsJson ?? "[]") ?? new List<int>();
-
-                return new OrderResponseDto
-                {
-                    OrderId = o.OrderId,
-                    Status = o.Status.ToString(),
-                    CustomerName = o.Customer?.Name ?? "",
-                    WasherName = o.Washer?.Name ?? "",
-                    CarDetails = o.Car == null ? "" : $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
-                    PlanName = o.ServicePlan?.Name ?? "",
-                    AddOn = addOns
-                        .Where(a => orderAddOnIds.Contains(a.AddOnId))
-                        .Select(a => new OrderAddOnDto { AddOnName = a.Name, Price = a.Price })
-                        .ToList(),
-                    TotalAmount = o.TotalAmount,
-                    ScheduledAt = o.ScheduledAt,
-                    Location = o.Location ?? "",
-                    Notes = o.Notes ?? ""
-                };
+                OrderId = o.OrderId,
+                Status = o.Status.ToString(),
+                CustomerName = o.Customer?.Name ?? "",
+                WasherName = o.Washer?.Name ?? "",
+                CarDetails = o.Car == null ? "" : $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}",
+                PlanName = o.ServicePlan?.Name ?? "",
+                AddOnName = o.AddOn?.Name,
+                AddOnPrice = o.AddOn?.Price ?? 0,
+                TotalAmount = o.TotalAmount,
+                ScheduledAt = o.ScheduledAt,
+                Location = o.Location ?? "",
+                Notes = o.Notes ?? ""
             }).ToList();
         }
 

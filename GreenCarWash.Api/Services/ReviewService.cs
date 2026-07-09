@@ -13,14 +13,12 @@ namespace GreenCarWash.Api.Services
     {
         private readonly IReviewRepository _reviewRepo;
         private readonly IOrderRepository _orderRepo;
-        private readonly IUserRepository _userRepo;
         private readonly IWasherRepository _washerRepo;
 
         public ReviewService(IReviewRepository reviewRepo, IOrderRepository orderRepo, IUserRepository userRepo, IWasherRepository washerRepo)
         {
             _reviewRepo = reviewRepo;
             _orderRepo = orderRepo;
-            _userRepo = userRepo;
             _washerRepo = washerRepo;
         }
 
@@ -35,10 +33,6 @@ namespace GreenCarWash.Api.Services
             {
                 throw new System.InvalidOperationException("Cannot review an incomplete order.");
             }
-            // if (order.WasherId == null)
-            // {
-            //     throw new InvalidOperationException("Order has no assigned washer.");
-            // }
 
             if (order.WasherId != request.WasherId)
             {

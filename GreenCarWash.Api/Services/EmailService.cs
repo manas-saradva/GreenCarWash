@@ -26,7 +26,7 @@ namespace GreenCarWash.Api.Services
                 From = new MailAddress(_settings.SenderEmail, _settings.SenderName),
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = true
+                IsBodyHtml = false
             };
 
             message.To.Add(to);

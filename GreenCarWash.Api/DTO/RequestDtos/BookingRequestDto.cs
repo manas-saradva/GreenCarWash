@@ -21,7 +21,7 @@ namespace GreenCarWash.Api.DTOs.RequestDtos
         [StringLength(500)]
         public string Notes{get;set;} = string.Empty;
 
-        public List<int> AddOns{get;set;} = new List<int>();
+        public int? AddOnId{get;set;}
 
         public string? PromoCode{get;set;}
 

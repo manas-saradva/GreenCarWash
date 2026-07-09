@@ -33,7 +33,9 @@ namespace GreenCarWash.Api.Models
         [ForeignKey("PromoCodeId")]
         public Promo_code? PromoCode{get;set;}
 
-        public string AddOnsJson{get;set;} = "[]";
+        public int? AddOnId{get;set;}
+        [ForeignKey("AddOnId")]
+        public Add_on? AddOn{get;set;}
 
         public OrderStatus Status{get;set;} = OrderStatus.Pending;
 

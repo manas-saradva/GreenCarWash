@@ -40,6 +40,7 @@ namespace GreenCarWash.Api.Repositories
                 .Include(o => o.ServicePlan)
                 .Include(o => o.Customer)
                 .Include(o => o.Washer)
+                .Include(o => o.AddOn)
                 .ToListAsync();
         }
     }

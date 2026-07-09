@@ -91,6 +91,8 @@ namespace GreenCarWash.Api.Services
                 WasherName = o.Washer?.Name ?? "",
                 CarDetails = o.Car != null ? $"{o.Car.Make} {o.Car.Model} ({o.Car.Year}) - {o.Car.LicensePlate}" : "",
                 PlanName = o.ServicePlan?.Name ?? "",
+                AddOnName = o.AddOn?.Name,
+                AddOnPrice = o.AddOn?.Price ?? 0,
                 TotalAmount = o.TotalAmount,
                 ScheduledAt = o.ScheduledAt,
                 Location = o.Location,

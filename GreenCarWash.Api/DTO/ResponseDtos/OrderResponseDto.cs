@@ -13,7 +13,8 @@ namespace GreenCarWash.Api.DTOs.ResponseDtos
         public string WasherName{get;set;} = string.Empty;
         public string CarDetails{get;set;} = string.Empty;
         public string PlanName{get;set;} = string.Empty;
-        public List<OrderAddOnDto> AddOn {get;set;} = new List<OrderAddOnDto>();
+        public string? AddOnName{get;set;}
+        public decimal AddOnPrice{get;set;}
         public decimal TotalAmount{get;set;}
         public DateTime ScheduledAt{get;set;}
         public string Location{get;set;} = string.Empty;
